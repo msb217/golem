@@ -171,7 +171,9 @@ class SimulatedTranscodingOperation:
 
     def _build_result_diff(self,
                            input_file: str,
-                           output_file: str) -> Diff:
+                           output_file: str) -> \
+            Tuple[FfprobeFormatReport, FfprobeFormatReport, dict]:
+
         assert os.path.isfile(input_file)
         assert os.path.isfile(output_file)
 
@@ -183,14 +185,14 @@ class SimulatedTranscodingOperation:
             tmp_metadata_dir,
             [input_file, output_file]
         )
-
         return (
             input_report,
             output_report,
             output_report.diff(input_report, self._diff_overrides),
         )
 
-    def run(self, relative_input_file: str) -> Diff:
+    def run(self, relative_input_file: str) -> \
+            Tuple[FfprobeFormatReport, FfprobeFormatReport, dict]:
         try:
             (input_file, output_file) = self._build_file_names(
                 relative_input_file)
