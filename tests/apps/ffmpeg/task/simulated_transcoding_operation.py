@@ -4,7 +4,7 @@ import tempfile
 from typing import Any, Dict, Optional, Tuple
 
 from apps.transcoding.common import VideoCodec, Container
-from tests.apps.ffmpeg.task.ffprobe_report import Diff, FfprobeFormatReport, \
+from tests.apps.ffmpeg.task.ffprobe_report import FfprobeFormatReport, \
     FileExcludes, FileOverrides, fuzzy_int_if_possible
 from tests.apps.ffmpeg.task.ffprobe_report_set import FfprobeReportSet
 
