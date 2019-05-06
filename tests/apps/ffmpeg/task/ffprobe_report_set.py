@@ -37,7 +37,7 @@ class FfprobeReportSet:
                 )
 
                 if (diff_dict['location'] == 'format' and
-                        diff_dict['attribute'] == stream_types_different):
+                        diff_dict['attribute'] == 'stream_types'):
                     stream_types_different = True
 
             elif diff_dict['reason'] == "No matching stream":
