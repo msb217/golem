@@ -59,7 +59,6 @@ class FfprobeReportSet:
 
         return "<ol><li>" + "</li><li>".join(output_lines) + "</li><ol>"
 
-
     def collect_error(self,
                       error_message: str,
                       experiment_name: str,
