@@ -74,8 +74,10 @@ files_to_check() {
 
 main() {
     # credit: https://unix.stackexchange.com/questions/155046/determine-if-git-working-directory-is-clean-from-a-script/183976
-    if [[ -n "$(git status --untracked-files=no --porcelain)" ]]; then
+    local git_status_res="$(git status --untracked-files=no --porcelain)"
+    if [[ -n "${git_status_res}" ]]; then
         message "You must commit or stash changes."
+        printf "${git_status_res}\n\n\n"
         exit -1
     fi
 
