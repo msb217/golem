@@ -478,6 +478,9 @@ class TaskHeaderKeeper:
             logger.warning("Wrong task header received: {}".format(err))
             return False
 
+    def has_task_header(self, task_id: str) -> bool:
+        return task_id in self.task_headers
+
     def update_supported_set(self, header: dt_tasks.TaskHeader) -> None:
 
         task_id = header.task_id

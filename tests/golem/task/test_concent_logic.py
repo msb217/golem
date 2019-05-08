@@ -59,18 +59,17 @@ class TaskToComputeConcentTestCase(testutils.TempDirFixture):
         self.task_session = tasksession.TaskSession(mock.MagicMock())
         self.task_session.concent_service.enabled = True
         self.task_session.task_computer.has_assigned_task.return_value = False
-        self.task_session.task_server.keys_auth.ecc.raw_pubkey = \
-            self.keys.raw_pubkey
-        self.task_session.task_server.config_desc.max_resource_size = \
-            1024 * 1024 * 1024 * 100
-        self.task_session.task_server.task_keeper\
-            .task_headers[self.msg.task_id]\
+        task_server = self.task_session.task_server
+        task_server.keys_auth.ecc.raw_pubkey = self.keys.raw_pubkey
+        task_server.config_desc.max_resource_size = 1024 * 1024 * 1024 * 100
+        task_server.task_keeper.has_task_header.return_value = True
+        task_server.task_keeper.task_headers[self.msg.task_id]\
             .subtasks_count = 10
-        self.task_session.task_server.client.transaction_system\
+        task_server.client.transaction_system\
             .get_available_gnt.return_value = self.msg.price * 10
-        self.task_session.task_server.client.transaction_system\
+        task_server.client.transaction_system\
             .concent_balance.return_value = (self.msg.price * 10) * 2
-        self.task_session.task_server.client.transaction_system\
+        task_server.client.transaction_system\
             .concent_timelock.return_value = 0
         self.task_session.task_manager.task_finished.return_value = False
 

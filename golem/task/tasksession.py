@@ -493,6 +493,7 @@ class TaskSession(BasicSafeSession, ResourceHandshakeSessionMixin):
     def _react_to_task_to_compute(self, msg: message.tasks.TaskToCompute):
         ctd: Optional[message.tasks.ComputeTaskDef] = msg.compute_task_def
         want_to_compute_task = msg.want_to_compute_task
+
         if ctd is None or want_to_compute_task is None:
             logger.debug(
                 'TaskToCompute without ctd or want_to_compute_task: %r', msg)
@@ -515,8 +516,9 @@ class TaskSession(BasicSafeSession, ResourceHandshakeSessionMixin):
             message=msg
         )
 
-        def _cannot_compute(reason):
-            logger.debug("Cannot %r", reason)
+        def _cannot_compute(reason, detail=""):
+            logger.debug("Cannot compute task. reason=%s, detail=%s",
+                         reason.name if reason else 'None', detail)
             self.send(
                 message.tasks.CannotComputeTask(
                     task_to_compute=msg,
@@ -526,9 +528,14 @@ class TaskSession(BasicSafeSession, ResourceHandshakeSessionMixin):
             self.dropped()
 
         reasons = message.tasks.CannotComputeTask.REASON
+        task_keeper = self.task_server.task_keeper
 
         if self.task_computer.has_assigned_task():
-            _cannot_compute(reasons.OfferCancelled)
+            _cannot_compute(reasons.OfferCancelled, "already computing")
+            return
+
+        if not task_keeper.has_task_header(msg.task_id):
+            _cannot_compute(reasons.OfferCancelled, "task_header missing")
             return
 
         if self.concent_service.enabled and not msg.concent_enabled:
@@ -545,10 +552,8 @@ class TaskSession(BasicSafeSession, ResourceHandshakeSessionMixin):
             _cannot_compute(reasons.ResourcesTooBig)
             return
 
-        number_of_subtasks = self.task_server.task_keeper\
-            .task_headers[msg.task_id]\
-            .subtasks_count
-        total_task_price = msg.price * number_of_subtasks
+        subtasks_count = task_keeper.task_headers[msg.task_id].subtasks_count
+        total_task_price = msg.price * subtasks_count
         transaction_system = self.task_server.client.transaction_system
         requestors_gntb_balance = transaction_system.get_available_gnt(
             account_address=msg.requestor_ethereum_address,
