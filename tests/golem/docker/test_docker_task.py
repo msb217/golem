@@ -52,8 +52,7 @@ class DockerTaskTestCase(
     TASK_BUILDER_CLASS: Type[Builder]
 
     def setUp(self) -> None:
-        TempDirFixture.setUp(self)
-        DockerTestCase.setUp(self)
+        super().setUp()
 
         self.dirs_to_remove: List[PathOrStr] = []
         self.files_to_remove: List[PathOrStr] = []
@@ -71,8 +70,7 @@ class DockerTaskTestCase(
             if os.path.isdir(d):
                 shutil.rmtree(d)
 
-        DockerTestCase.tearDown(self)
-        TempDirFixture.tearDown(self)
+        super().tearDown()
 
     @classmethod
     def _get_test_task_definition(cls) -> TaskDefinition:

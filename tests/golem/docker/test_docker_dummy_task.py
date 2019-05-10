@@ -71,6 +71,7 @@ class TestDockerDummyTask(
         os.rmdir(cls.test_tmp)
         super().tearDownClass()
 
+
     def _extract_results(self, computer: LocalComputer, subtask_id: str) \
             -> Path:
         """

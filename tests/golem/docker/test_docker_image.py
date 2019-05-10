@@ -5,10 +5,11 @@ from docker import errors
 
 from golem.docker.client import local_client
 from golem.docker.image import DockerImage
+from golem.testutils import SetupTeardownPassingTestCase
 from golem.tools.ci import ci_skip
 
 
-class DockerTestCase(unittest.TestCase):
+class DockerTestCase(SetupTeardownPassingTestCase):
 
     TEST_REPOSITORY = "golemfactory/base"
     TEST_TAG = "1.2"
@@ -43,6 +44,7 @@ class TestDockerImage(DockerTestCase):
         for c in client.containers(all=True):
             if c["Image"] == self.TEST_IMAGE:
                 client.remove_container(c["Id"], force=True)
+        super().tearDown()
 
     def _is_test_image(self, img):
         self.assertEqual(img.name, self.TEST_IMAGE)
@@ -96,7 +98,7 @@ class TestDockerImage(DockerTestCase):
                           tag=self.TEST_TAG,
                           image_id=self.TEST_ENV_ID)
         img2 = DockerImage(self.TEST_REPOSITORY, tag=self.TEST_TAG)
-        
+
         assert img.cmp_name_and_tag(img2)
         assert img2.cmp_name_and_tag(img)
 

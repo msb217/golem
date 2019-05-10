@@ -8,7 +8,7 @@ from twisted.internet.selectreactor import SelectReactor
 from twisted.internet.task import Clock
 
 from golem.testutils import TempDirFixture as TestDirFixture
-from golem.testutils import DatabaseFixture
+from golem.testutils import DatabaseFixture, SetupTeardownPassingTestCase
 
 
 __all__ = ['TestWithReactor', 'TestDirFixtureWithReactor']
@@ -99,12 +99,13 @@ class MockReactorThread(Thread):
         self.done = True
 
 
-class TestWithReactor(unittest.TestCase):
+class TestWithReactor(SetupTeardownPassingTestCase):
     reactor_thread = None
     prev_reactor = None
 
     @classmethod
     def setUpClass(cls):
+        super().setUpClass()
         try:
             _reactor, cls.prev_reactor = replace_reactor()
             _reactor.installed = True
@@ -118,6 +119,7 @@ class TestWithReactor(unittest.TestCase):
         if cls.reactor_thread and cls.reactor_thread.isAlive():
             cls.reactor_thread.stop()
             uninstall_reactor()
+        super().tearDownClass()
 
     @classmethod
     def _get_reactor(cls):
@@ -132,22 +134,18 @@ class TestWithReactor(unittest.TestCase):
 class TestDirFixtureWithReactor(TestDirFixture, TestWithReactor):
     @classmethod
     def setUpClass(cls):
-        TestDirFixture.setUpClass()
-        TestWithReactor.setUpClass()
+        super().setUpClass()
 
     @classmethod
     def tearDownClass(cls):
-        TestWithReactor.tearDownClass()
-        TestDirFixture.tearDownClass()
+        super().tearDownClass()
 
 
 class TestDatabaseWithReactor(DatabaseFixture, TestWithReactor):
     @classmethod
     def setUpClass(cls):
-        DatabaseFixture.setUpClass()
-        TestWithReactor.setUpClass()
+        super().setUpClass()
 
     @classmethod
     def tearDownClass(cls):
-        TestWithReactor.tearDownClass()
-        DatabaseFixture.tearDownClass()
+        super().tearDownClass()

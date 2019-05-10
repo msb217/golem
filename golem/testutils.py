@@ -18,7 +18,22 @@ from golem.model import DB_MODELS, db, DB_FIELDS
 logger = logging.getLogger(__name__)
 
 
-class TempDirFixture(unittest.TestCase):
+class SetupTeardownPassingTestCase(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+
+    def setUp(self):
+        super().setUp()
+
+    def tearDown(self):
+        super().tearDown()
+
+class TempDirFixture(SetupTeardownPassingTestCase):
     root_dir = None
 
     @classmethod
@@ -41,14 +56,16 @@ class TempDirFixture(unittest.TestCase):
                 # Select nice root temp dir exactly once.
                 cls.root_dir = tempfile.mkdtemp(prefix='golem-tests-')
 
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
     # Concurrent tests will fail
-    # @classmethod
-    # def tearDownClass(cls):
     #     if os.path.exists(cls.root_dir):
     #         shutil.rmtree(cls.root_dir)
 
     def setUp(self):
 
+        super().setUp()
         # KeysAuth uses it. Default val (250k+) slows down the tests terribly
         ethereum.keys.PBKDF2_CONSTANTS['c'] = 1
 
@@ -78,6 +95,7 @@ class TempDirFixture(unittest.TestCase):
             # Try again after 3 seconds
             sleep(3)
             self.__remove_files()
+        super().tearDown()
 
     def temp_file_name(self, name: str) -> str:
         return os.path.join(self.tempdir, name)
