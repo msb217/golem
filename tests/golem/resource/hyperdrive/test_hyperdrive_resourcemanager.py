@@ -40,6 +40,7 @@ class ResourceSetUp(TempDirFixture):
     __test__ = False
 
     def setUp(self):
+        super().setUp()
         self.dir_manager = DirManager(self.path)
         self.node_name = str(uuid.uuid4())
         self.task_id = str(uuid.uuid4())

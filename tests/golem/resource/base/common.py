@@ -27,8 +27,7 @@ class AddGetResources(TempDirFixture, LogTestCase):
     _resource_manager_class = None
 
     def setUp(self):
-        TempDirFixture.setUp(self)
-        LogTestCase.setUp(self)
+        super().setUp()
 
         self.task_id = str(uuid.uuid4())
 
@@ -51,8 +50,7 @@ class AddGetResources(TempDirFixture, LogTestCase):
         self.client_1.quit()
         self.client_2.quit()
 
-        LogTestCase.tearDown(self)
-        TempDirFixture.tearDown(self)
+        super().tearDown()
 
     @staticmethod
     def _create_resources(resource_dir):

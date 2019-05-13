@@ -12,7 +12,7 @@ from golem.core.keysauth import KeysAuth
 from golem.resource.base.resourceserver import BaseResourceServer
 from golem.resource.dirmanager import DirManager
 from golem.resource.hyperdrive.resourcesmanager import DummyResourceManager
-from golem.tools import testwithreactor
+from golem.tools.testwithreactor import TestDirFixtureWithReactor
 
 from tests.factories.hyperdrive import hyperdrive_client_kwargs
 
@@ -39,7 +39,7 @@ class MockConfig:
         self.root_path = root_path
 
 
-class TestResourceServer(testwithreactor.TestDirFixtureWithReactor):
+class TestResourceServer(TestDirFixtureWithReactor):
 
     def setUp(self):
         super().setUp()
