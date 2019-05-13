@@ -141,6 +141,10 @@ class CrossbarRouter(object):
                 "dhparam": cert_manager.dh_path,
             }
 
+        name = 'Golem'
+        if os.environ.get('PYTEST_CURRENT_TEST'):
+            name += ':' + os.environ.get('PYTEST_CURRENT_TEST')
+
         return {
             'version': 2,
             'controller': {
@@ -151,7 +155,7 @@ class CrossbarRouter(object):
             'workers': [{
                 'type': 'router',
                 'options': {
-                    'title': 'Golem'
+                    'title': name
                 },
                 'transports': [{
                     'type': 'websocket',

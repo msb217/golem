@@ -118,7 +118,7 @@ class TestWithReactor(SetupTeardownPassingTestCase):
     def tearDownClass(cls):
         if cls.reactor_thread and cls.reactor_thread.isAlive():
             cls.reactor_thread.stop()
-            uninstall_reactor()
+        uninstall_reactor()
         super().tearDownClass()
 
     @classmethod

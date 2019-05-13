@@ -124,6 +124,24 @@ class _TestRouter(TestDirFixtureWithReactor):
         super().setUp()
         self.state = _TestRouter.State()
 
+    def tearDown(self):
+        # if self.reactor_thread and self.reactor_thread.reactor:
+        #     try:
+        #         self.reactor_thread.reactor.stop()
+        #     except:
+        #         print("Failed to stop reactor")
+
+        if self.state:
+            if self.state.frontend_session:
+                self.state.frontend_session.disconnect()
+
+            if self.state.backend_session:
+                self.state.backend_session.disconnect()
+
+            if self.state.router:
+                 self.state.router.stop()
+        super().tearDown()
+
     @inlineCallbacks
     def _start_backend_session(self, *_):
         user = self.CSRB_BACKEND
