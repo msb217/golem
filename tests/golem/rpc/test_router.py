@@ -205,7 +205,6 @@ class _TestRouter(TestDirFixtureWithReactor):
 
         if expect_error and not self.state.errors:
             raise Exception("Expected error")
-        self.reactor_thread.reactor.stop()
 
     def _run_test(self, expect_error, *args, **kwargs):
         thread = Thread(target=self.in_thread, args=args, kwargs=kwargs)
