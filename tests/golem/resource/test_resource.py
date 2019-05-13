@@ -1,5 +1,5 @@
 import os
-import unittest.mock as mock
+from unittest import mock, skip
 import zipfile
 
 from apps.core.task.coretask import CoreTask
@@ -62,7 +62,7 @@ class TestTaskResource(TempDirFixture):
     def testInit(self):
         self.assertIsNotNone(TaskResource(self.path))
 
-
+@skip
 class TestGetTaskResources(TempDirFixture):
 
     @staticmethod
