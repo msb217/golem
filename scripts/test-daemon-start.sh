@@ -27,6 +27,9 @@ kill_running_hyperg () {
 
 kill_running_hyperg
 
+# cleanup hanging workers
+pkill -f hyperg || echo "No hanging workers to kill"
+
 echo "Starting hyperg"
 hyperg > /dev/null 2>&1 &
 H_PID=$!
