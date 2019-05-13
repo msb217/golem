@@ -121,6 +121,7 @@ class _TestRouter(TestDirFixtureWithReactor):
             )
 
     def setUp(self):
+        print("SETUP")
         super().setUp()
         self.state = _TestRouter.State()
 
@@ -130,6 +131,7 @@ class _TestRouter(TestDirFixtureWithReactor):
         #         self.reactor_thread.reactor.stop()
         #     except:
         #         print("Failed to stop reactor")
+        print("TEARDOWN")
 
         if self.state:
             if self.state.frontend_session:
@@ -163,6 +165,7 @@ class _TestRouter(TestDirFixtureWithReactor):
 
     @inlineCallbacks
     def _backend_session_started(self, *_):
+        print("_backend_session_started()")
         txdefer = self.state.backend_session.register(
             self.state.backend_session.exposed_procedures,
             'sys.exposed_procedures',
@@ -188,8 +191,10 @@ class _TestRouter(TestDirFixtureWithReactor):
         while True:
             time.sleep(0.5)
             if time.time() > deadline:
+                print("ERROR IN_wait_for_thread()")
                 self.state.errors.append(Exception("Test timed out"))
             if self.state.errors or self.state.done:
+                print("HAS ERROR OR IS DONE")
                 break
 
         if self.state.frontend_session:
@@ -370,6 +375,7 @@ class _TestRPCAuth(_TestRouter):
         try:
             yield self._start_backend_session()
         except Exception as e:  # pylint: disable=broad-except
+            print("ERROR IN _start_backend_session")
             self.state.add_errors(e)
 
     @inlineCallbacks
