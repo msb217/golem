@@ -18,6 +18,8 @@ from autobahn.wamp import ApplicationError
 from twisted.internet.defer import inlineCallbacks
 from twisted.internet.defer import setDebugging
 
+
+from golem.core.deferred import sync_wait
 from golem.rpc import cert
 from golem.rpc import utils as rpc_utils
 from golem.rpc.common import CROSSBAR_DIR, CROSSBAR_PORT
@@ -141,7 +143,7 @@ class _TestRouter(TestDirFixtureWithReactor):
                 self.state.backend_session.disconnect()
 
             if self.state.router:
-                 self.state.router.stop()
+                 sync_wait(self.state.router.stop)
         super().tearDown()
 
     @inlineCallbacks
