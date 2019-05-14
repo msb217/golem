@@ -350,8 +350,8 @@ function install_dependencies()
 
     if [[ ${INSTALL_GVISOR_RUNTIME} -eq 1 ]]; then
         # TODO: replace `latest` with fixed version
-        wget https://storage.googleapis.com/gvisor/releases/nightly/latest/runsc
-        wget https://storage.googleapis.com/gvisor/releases/nightly/latest/runsc.sha512
+        wget https://storage.googleapis.com/gvisor/releases/nightly/2019-04-01/runsc
+        wget https://storage.googleapis.com/gvisor/releases/nightly/2019-04-01/runsc.sha512
         sha512sum -c runsc.sha512
         rm runsc.sha512
 
