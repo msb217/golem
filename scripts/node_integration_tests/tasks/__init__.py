@@ -24,7 +24,7 @@ _TASK_SETTINGS = {
         'type': "Blender",
         'name': 'test task',
         'timeout': "0:04:00",
-        "subtask_timeout": "0:01:30",
+        "subtask_timeout": "0:02:30",
         "subtasks_count": 2,
         "bid": 1.0,
         "resources": [],
