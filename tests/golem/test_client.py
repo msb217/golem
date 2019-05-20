@@ -1102,7 +1102,7 @@ class TestClientRPCMethods(TestClientBase, LogTestCase):
 
     def test_golem_status_no_publisher(self, *_):
         component = 'component'
-        status = 'method', 'stage', 'data'
+        status = 'method', 'stage', {'status': 'message', 'value': 'data'}
 
         # status published, no rpc publisher
         StatusPublisher.publish(component, *status)
@@ -1111,7 +1111,7 @@ class TestClientRPCMethods(TestClientBase, LogTestCase):
     @inlineCallbacks
     def test_golem_status_with_publisher(self, *_):
         component = 'component'
-        status = 'method', 'stage', 'data'
+        status = 'method', 'stage', {'status': 'message', 'value': 'data'}
 
         # status published, with rpc publisher
         StatusPublisher._rpc_publisher = Mock()
