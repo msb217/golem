@@ -155,17 +155,17 @@ class TestffmpegIntegration(FfmpegIntegrationTestCase):
         for video_codec, container in [
             (VideoCodec.AV1, Container.WEBM),
             (VideoCodec.FLV1, Container.FLV),
-            (VideoCodec.H_263, Container.MKV),
+            (VideoCodec.H_263, Container.MATROSKA),
             (VideoCodec.H_264, Container.MP4),
             (VideoCodec.HEVC, Container.MP4),
             (VideoCodec.MJPEG, Container.MOV),
             (VideoCodec.MPEG_1, Container.MPEG),
-            (VideoCodec.MPEG_2, Container.MPG),
-            (VideoCodec.MPEG_4, Container.MTS),
+            (VideoCodec.MPEG_2, Container.MPEG),
+            (VideoCodec.MPEG_4, Container.MPEGTS),
             (VideoCodec.THEORA, Container.OGV),
             (VideoCodec.VP8, Container.WEBM),
-            (VideoCodec.VP9, Container.MKV),
-            (VideoCodec.WMV1, Container.WMV),
+            (VideoCodec.VP9, Container.MATROSKA),
+            (VideoCodec.WMV1, Container.ASF),
             (VideoCodec.WMV2, Container.ASF),
         ]
     )

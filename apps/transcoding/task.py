@@ -279,7 +279,7 @@ class TranscodingTaskBuilder(CoreTaskBuilder):
         # FIXME get metadata by ffmpeg docker container
         # with open(path) as f:
         # return json.load(f)
-        return {'container': 'ts'}
+        return {}
 
     @classmethod
     def _get_required_field(cls,

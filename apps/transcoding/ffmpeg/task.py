@@ -52,6 +52,7 @@ class ffmpegTask(TranscodingTask):
         extra_data = {
             'track': chunk,
             'targs': {
+                #'container':
                 'video': {
                     'codec': vc,
                     'bitrate': video_params.bitrate
@@ -79,8 +80,13 @@ class ffmpegDefaults(TaskDefaults):
 
 
 class ffmpegTaskBuilder(TranscodingTaskBuilder):
-    SUPPORTED_FILE_TYPES = [Container.MKV, Container.AVI,
-                            Container.MP4]
+    # TMP: Why does it work without adding more types here?
+    # TMP: Where is it used? Are these file extensions?
+    SUPPORTED_FILE_TYPES = [
+        Container.MATROSKA,
+        Container.AVI,
+        Container.MP4,
+    ]
     SUPPORTED_VIDEO_CODECS = [VideoCodec.MPEG_2, VideoCodec.H_264]
     SUPPORTED_AUDIO_CODECS = [AudioCodec.MP3, AudioCodec.AAC]
     TASK_CLASS = ffmpegTask

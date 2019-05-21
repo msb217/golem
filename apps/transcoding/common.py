@@ -66,22 +66,40 @@ class AudioCodec(Enum):
 
 
 class Container(Enum):
-    ASF = 'asf'     # ASF (Advanced / Active Streaming Format)
-    FLV = 'flv'     # FLV (Flash Video)
-    M4V = 'm4v'     # QuickTime / MOV
-    MOV = 'mov'     # QuickTime / MOV
-    MP4 = 'mp4'     # QuickTime / MOV
-    MPEG = 'mpeg'   # MPEG-PS (MPEG-2 Program Stream)
-    MPG = 'mpg'     # raw MPEG video
-    MTS = 'mts'     # MPEG-TS (MPEG-2 Transport Stream)
-    AVI = 'avi'     # AVI (Audio Video Interleaved)
-    MKV = 'mkv'     # Matroska / WebM
-    OGV = 'ogv'     # Ogg
-    TS = 'ts'       # MPEG-TS (MPEG-2 Transport Stream)
-    VOB = 'vob'     # MPEG-PS (MPEG-2 Program Stream)
-    WEBM = 'webm'   # Matroska / WebM
-    WMV = 'wmv'     # ASF (Advanced / Active Streaming Format)
-    X_3GP = '3gp'   # QuickTime / MOV
+    """ Containers that can be used as transcoding target. Values are muxer
+        names used by ffmpeg (see `ffmpeg -muxers` for full list) rather than
+        file extensions and can be used directly with the `-f` option.
+
+        Note that:
+        1. A container format corresponds to a muxer/demuxer pair in ffmpeg.
+           Muxer can write it and demuxer can read it.
+        2. There is no 1:1 correspondence between muxers and demuxers. Often
+           a demuxer can read more than one format and thus can be paired with
+           multiple muxers (e.g. files produced by both `mp4` and `mov` muxers
+           can be read by the `mov,mp4,m4a,3gp,3g2,mj2` demuxer).
+           There are also many formats for which ffmpeg supports only encoding
+           or only decoding so one of the pair is missing.
+        3. Ideally a container as we understand it should be more general than
+           a muxer. E.g. in theory ffmpeg could provide two different muxers
+           capable of producing the same format. We could also switch to a
+           different program/library that does things differently. In practice
+           it's hard to achieve since we're completely relying on ffmpeg here.
+    """
+
+    ASF = 'asf'           # ASF (Advanced / Active Streaming Format);
+                          # .asf and .wmv extension
+    FLV = 'flv'           # FLV (Flash Video)
+    IPOD = 'ipod'         # iPod H.264 MP4 (MPEG-4 Part 14); .m4v extension
+    MOV = 'mov'           # QuickTime / MOV
+    MP4 = 'mp4'           # MP4 (MPEG-4 Part 14)
+    MPEG = 'mpeg'         # MPEG-1 Systems / MPEG program stream
+    MPEGTS = 'mpegts'     # MPEG-TS (MPEG-2 Transport Stream)
+    AVI = 'avi'           # AVI (Audio Video Interleaved)
+    MATROSKA = 'matroska' # Matroska
+    OGV = 'ogv'           # Ogg Video
+    SVCD = 'svcd'         # MPEG-2 PS (SVCD); .vob extension
+    WEBM = 'webm'         # WebM
+    X_3GP = '3gp'         # 3GP (3GPP file format)
 
     @staticmethod
     @HandleValueError(unsupported)
@@ -93,6 +111,36 @@ class Container(Enum):
 
     def get_supported_audio_codecs(self):
         return CONTAINER_SUPPORTED_CODECS[self][1]
+
+
+class Demuxer(Enum):
+    ASF = 'asf'                       # ASF (Advanced / Active Streaming Format)
+    FLV = 'flv'                       # FLV (Flash Video)
+    MOV_MP4_M4A_3GP_3G2_MJ2 = 'mov,mp4,m4a,3gp,3g2,mj2'   # QuickTime / MOV
+    MPEG = 'mpeg'                     # MPEG-1 Systems / MPEG program stream
+    MPEGTS = 'mpegts'                 # MPEG-TS (MPEG-2 Transport Stream)
+    AVI = 'avi'                       # AVI (Audio Video Interleaved)
+    MATROSKA_WEBM = 'matroska,webm'   # Matroska / WebM
+    OGG = 'ogg'                       # Ogg
+
+
+CONTAINER_TO_DEMUXER = {
+    Container.ASF: Demuxer.ASF,
+    Container.FLV: Demuxer.FLV,
+    Container.IPOD: Demuxer.MOV_MP4_M4A_3GP_3G2_MJ2,
+    Container.MOV: Demuxer.MOV_MP4_M4A_3GP_3G2_MJ2,
+    Container.MP4: Demuxer.MOV_MP4_M4A_3GP_3G2_MJ2,
+    Container.MPEG: Demuxer.MPEG,
+    Container.MPEGTS: Demuxer.MPEGTS,
+    Container.AVI: Demuxer.AVI,
+    Container.MATROSKA: Demuxer.MATROSKA_WEBM,
+    Container.OGV: Demuxer.OGG,
+    Container.SVCD: Demuxer.MPEG,
+    Container.WEBM: Demuxer.MATROSKA_WEBM,
+    Container.X_3GP: Demuxer.MOV_MP4_M4A_3GP_3G2_MJ2,
+}
+assert set(CONTAINER_TO_DEMUXER) == set(Container)
+assert set(CONTAINER_TO_DEMUXER.values()).issubset(set(Demuxer))
 
 
 ALL_SUPPORTED_CODECS = ([c for c in VideoCodec], [c for c in AudioCodec])
@@ -118,7 +166,7 @@ CONTAINER_SUPPORTED_CODECS = {
             AudioCodec.MP3,
         ],
     ),
-    Container.MKV: (
+    Container.MATROSKA: (
         [
             VideoCodec.FLV1,
             #VideoCodec.H_263, # Only some resolutions are supported
@@ -175,6 +223,7 @@ CONTAINER_SUPPORTED_CODECS = {
         [
             AudioCodec.AAC,
             AudioCodec.MP3,
+            AudioCodec.WMAV2,
         ],
     ),
     Container.FLV: (
@@ -187,7 +236,7 @@ CONTAINER_SUPPORTED_CODECS = {
             AudioCodec.MP3,
         ],
     ),
-    Container.M4V: (
+    Container.IPOD: (
         [
             VideoCodec.H_264,
             VideoCodec.MPEG_4,
@@ -240,29 +289,7 @@ CONTAINER_SUPPORTED_CODECS = {
             AudioCodec.MP3,
         ],
     ),
-    Container.MPG: (
-        [
-            VideoCodec.FLV1,
-            #VideoCodec.H_263, # Only some resolutions are supported
-            VideoCodec.H_264,
-            VideoCodec.HEVC,
-            VideoCodec.MJPEG,
-            VideoCodec.MPEG_1,
-            VideoCodec.MPEG_2,
-            VideoCodec.MPEG_4,
-            VideoCodec.THEORA,
-            VideoCodec.VP8,
-            VideoCodec.VP9,
-            VideoCodec.WMV1,
-            VideoCodec.WMV2,
-        ],
-        [
-            AudioCodec.AAC,
-            AudioCodec.MP2,
-            AudioCodec.MP3,
-        ],
-    ),
-    Container.MTS: (
+    Container.MPEGTS: (
         [
             VideoCodec.FLV1,
             #VideoCodec.H_263, # Only some resolutions are supported
@@ -294,50 +321,7 @@ CONTAINER_SUPPORTED_CODECS = {
             AudioCodec.VORBIS,
         ],
     ),
-    Container.TS: (
-        [
-            VideoCodec.FLV1,
-            #VideoCodec.H_263, # Only some resolutions are supported
-            VideoCodec.H_264,
-            VideoCodec.HEVC,
-            VideoCodec.MJPEG,
-            VideoCodec.MPEG_1,
-            VideoCodec.MPEG_2,
-            VideoCodec.MPEG_4,
-            VideoCodec.THEORA,
-            VideoCodec.VP8,
-            VideoCodec.VP9,
-            VideoCodec.WMV1,
-            VideoCodec.WMV2,
-        ],
-        [
-            AudioCodec.AAC,
-            AudioCodec.MP3,
-        ],
-    ),
-    Container.WMV: (
-        [
-            VideoCodec.FLV1,
-            #VideoCodec.H_263, # Only some resolutions are supported
-            VideoCodec.H_264,
-            #VideoCodec.HEVC,   # ffmpeg complains about incorrect codec params
-            VideoCodec.MJPEG,
-            VideoCodec.MPEG_1,
-            VideoCodec.MPEG_2,
-            VideoCodec.MPEG_4,
-            VideoCodec.THEORA,
-            VideoCodec.VP8,
-            VideoCodec.VP9,
-            VideoCodec.WMV1,
-            VideoCodec.WMV2,
-        ],
-        [
-            AudioCodec.AAC,
-            AudioCodec.MP3,
-            AudioCodec.WMAV2,
-        ],
-    ),
-    Container.VOB: (
+    Container.SVCD: (
         [
             VideoCodec.FLV1,
             #VideoCodec.H_263, # Only some resolutions are supported
