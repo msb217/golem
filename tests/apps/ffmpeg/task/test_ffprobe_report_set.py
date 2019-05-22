@@ -167,6 +167,8 @@ class TestFfprobeReportSet(TestTaskIntegration):
                 input_value='h264/mp4/2seg',
             )
         output = self.ffprobe_report_set.to_markdown()
-        self.assertIn('| test_video0.mp4                                    | <ol><li>`video.bitrate`: `12376[+/-5%]` -> `13795[+/-5%]`</li><ol> |', output)  # noqa pylint:disable=line-too-long
-        self.assertIn('| test_video1.mp4                                    | OK                                                 |', output)  # noqa pylint:disable=line-too-long
-        self.assertIn("| test_video2.mp4                                    | <ol><li>`format.stream_types`: `{'video': 1, 'audio': 2, 'subtitle': 8}` -> `{'audio': 2, 'video': 1, 'subtitle': 7}`</li><ol> |", output)  # noqa pylint:disable=line-too-long
+        # pylint:disable=line-too-long
+        self.assertIn('| test_video0.mp4                                    | <ol><li>`video.bitrate`: `12376[+/-5%]` -> `13795[+/-5%]`</li><ol> |', output)
+        self.assertIn('| test_video1.mp4                                    | OK                                                 |', output)
+        self.assertIn("| test_video2.mp4                                    | <ol><li>`format.stream_types`: `{'video': 1, 'audio': 2, 'subtitle': 8}` -> `{'audio': 2, 'video': 1, 'subtitle': 7}`</li><ol> |", output)
+        # pylint:enable=line-too-long
