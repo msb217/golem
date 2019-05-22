@@ -101,18 +101,19 @@ class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
         self.assertEqual(diff_overrides, expected_diff_overrides)
 
     @parameterized.expand([
-        (['format'], [{'format_name'}]),
-        (['video'], [{'codec_name', 'bitrate'}]),
-        (['video'], [{'codec_name', 'bitrate'}]),
-        (['video'], [{'resolution', 'bitrate'}]),
-        (['format', 'video'], [{'format_name'}, {'bitrate'}]),
-        (['format', 'video'], [{'format_name'}, {'resolution', 'bitrate'}]),
+        ({'format': {'format_name'}},),
+        ({'video': {'codec_name', 'bitrate'}},),
+        ({'video': {'codec_name', 'bitrate'}},),
+        ({'video': {'resolution', 'bitrate'}},),
+        ({
+            'format': {'format_name'},
+            'video': {'bitrate'},
+        },),
+        ({
+            'format': {'format_name'},
+            'video': {'resolution', 'bitrate'},
+        },),
     ])
-    def test_exclude_from_diff_excludes_parameters_correctly(
-            self,
-            location,
-            fieldname,
-    ):
-        exclude = dict(zip(location, fieldname))
+    def test_exclude_from_diff_excludes_parameters_correctly(self, exclude):
         self.operation.exclude_from_diff(exclude)
         self.assertEqual(self.operation._diff_excludes, exclude)
