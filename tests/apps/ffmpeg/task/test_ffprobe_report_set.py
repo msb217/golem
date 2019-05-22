@@ -151,7 +151,7 @@ class TestFfprobeReportSet(TestTaskIntegration):
             )
             expected.update({
                 f'test_video{i}.mp4': self.diffs_and_results[i][1][
-                    'codec change'][f'test_video.mp4']
+                    'codec change'][f'test_video.mp4'],
             })
         self.assertDictEqual(
             self.ffprobe_report_set._report_tables['codec change'],
