@@ -22,9 +22,11 @@ class TestFfprobeReportSet(TestTaskIntegration):
             {
                 'codec change': {
                     'test_video.mp4': {
-                        'h264/mp4/2seg': "<ol><li>`video.bitrate`: "
+                        'h264/mp4/2seg': "<ol><li>"
+                                         "`video.bitrate`: "
                                          "`12376[+/-5%]` -> "
-                                         "`13795[+/-5%]`</li><ol>",
+                                         "`13795[+/-5%]`"
+                                         "</li><ol>",
                     },
                 },
             },
@@ -64,12 +66,17 @@ class TestFfprobeReportSet(TestTaskIntegration):
             {
                 'codec change': {
                     'test_video.mp4': {
-                        'h264/mp4/2seg': "<ol><li>`format.stream_types`: "
-                                         "`{'video': 1, 'audio': "
-                                         "2, 'subtitle': 8}` -> "
-                                         "`{'audio': 2, 'video': "
-                                         "1, 'subtitle': "
-                                         "7}`</li><ol>",
+                        'h264/mp4/2seg': "<ol><li>"
+                                         "`format.stream_types`: `{"
+                                         "'video': 1, "
+                                         "'audio': 2, "
+                                         "'subtitle': 8"
+                                         "}` -> `{"
+                                         "'audio': 2, "
+                                         "'video': 1, "
+                                         "'subtitle': 7"
+                                         "}`"
+                                         "</li><ol>",
                     },
                 },
             },
