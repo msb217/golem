@@ -7,52 +7,72 @@ from tests.apps.ffmpeg.task.ffprobe_report_set import FfprobeReportSet
 
 class TestFfprobeReportSet(TestTaskIntegration):
     diffs_and_results = [
-        ([{'location': 'video',
-           'attribute': 'bitrate',
-           'original_value': FuzzyInt(13795, 5),
-           'modified_value': FuzzyInt(12376, 5),
-           'reason': 'Different attribute values',
-           'original_stream_index': 0,
-           'modified_stream_index': 0}],
-         {'codec change': {
-             'test_video.mp4': {'h264/mp4/2seg': '<ol><li>`video.bitrate`: '
-                                                 '`12376[+/-5%]` -> '
-                                                 '`13795[+/-5%]`</li><ol>'}}}),
-
-        ([],
-         {'codec change': {
-             'test_video.mp4': {'h264/mp4/2seg': 'OK'}}}),
-
-        ([
+        (
+            [
+                {
+                    'location': 'video',
+                    'attribute': 'bitrate',
+                    'original_value': FuzzyInt(13795, 5),
+                    'modified_value': FuzzyInt(12376, 5),
+                    'reason': 'Different attribute values',
+                    'original_stream_index': 0,
+                    'modified_stream_index': 0
+                }
+            ],
             {
-                'location': 'format',
-                'attribute': 'stream_types',
-                'original_value': {
-                    'audio': 2,
-                    'video': 1,
-                    'subtitle': 7
+                'codec change': {
+                    'test_video.mp4': {
+                        'h264/mp4/2seg': '<ol><li>`video.bitrate`: '
+                                         '`12376[+/-5%]` -> '
+                                         '`13795[+/-5%]`</li><ol>'
+                    }
+                }
+            }
+        ),
+        (
+            [],
+            {'codec change': {
+                'test_video.mp4': {'h264/mp4/2seg': 'OK'}
+                }
+            }
+        ),
+        (
+            [
+                {
+                    'location': 'format',
+                    'attribute': 'stream_types',
+                    'original_value': {
+                        'audio': 2,
+                        'video': 1,
+                        'subtitle': 7
+                    },
+                    'modified_value': {
+                        'video': 1,
+                        'audio': 2,
+                        'subtitle': 8
+                    },
+                    'reason': 'Different attribute values'
                 },
-                'modified_value': {
-                    'video': 1,
-                    'audio': 2,
-                    'subtitle': 8
-                },
-                'reason': 'Different attribute values'
-            },
+                {
+                    'location': 'subtitle',
+                    'original_stream_index': None,
+                    'modified_stream_index': 1,
+                    'reason': 'No matching stream'
+                }
+            ],
             {
-                'location': 'subtitle',
-                'original_stream_index': None,
-                'modified_stream_index': 1,
-                'reason': 'No matching stream'
-            }],
-         {'codec change': {
-             'test_video.mp4': {
-                 'h264/mp4/2seg': '<ol><li>`format.stream_types`: '
-                                  "`{'video': 1, 'audio': "
-                                  "2, 'subtitle': 8}` -> "
-                                  "`{'audio': 2, 'video': "
-                                  "1, 'subtitle': "
-                                  '7}`</li><ol>'}}}),
+                'codec change': {
+                    'test_video.mp4': {
+                        'h264/mp4/2seg': '<ol><li>`format.stream_types`: '
+                                         "`{'video': 1, 'audio': "
+                                         "2, 'subtitle': 8}` -> "
+                                         "`{'audio': 2, 'video': "
+                                         "1, 'subtitle': "
+                                         '7}`</li><ol>'
+                    }
+                }
+            }
+        ),
     ]
 
     def setUp(self):
