@@ -29,7 +29,7 @@ class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
         self.operation.attach_to_report_set(self.ffprobe_report_set)
 
     @pytest.mark.slow
-    def test_run_returns_correct_variables_instances(self):
+    def test_run_collects_reports_and_diff(self):
         self.operation.request_video_codec_change(VideoCodec.H_264)
         self.operation.request_container_change(Container.MP4)
         input_report, output_report, diff = self.operation.run('test_video.mp4')
@@ -44,7 +44,7 @@ class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
 
     @mock.patch('golem.testutils.TestTaskIntegration.execute_task',
                 side_effect=BaseException)
-    def test_exception_during_task_execution_is_collected(self, _executor):
+    def test_exceptions_are_collected_but_not_silenced(self, _executor):
         self.operation.request_video_codec_change(VideoCodec.H_264)
         self.operation.request_container_change(Container.MP4)
         with self.assertRaises(BaseException):
@@ -78,7 +78,7 @@ class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
 
 
     ])
-    def test_diff_overrides_are_equal_to_expeted_if_function_changing_parameter_called(  # noqa pylint: disable=line-too-long
+    def test_diff_overrides_are_equal_to_expected_if_function_changing_parameter_called(  # noqa pylint: disable=line-too-long
             self,
             function_name,
             new_value,
