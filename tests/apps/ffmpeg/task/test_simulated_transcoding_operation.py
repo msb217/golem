@@ -17,8 +17,10 @@ class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
     def setUp(self):
         super(TestSimulatedTranscodingOperationIntegration, self).setUp()
 
-        self.RESOURCES = os.path.join(os.path.dirname(
-            os.path.dirname(os.path.realpath(__file__))), 'resources')
+        self.RESOURCES = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
+            'resources'
+        )
 
         self.operation = SimulatedTranscodingOperation(
             task_executor=self,
@@ -39,44 +41,53 @@ class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
         self.assertIsInstance(diff, list)
         self.assertIn(
             'h264/mp4/2seg',
-            self.ffprobe_report_set._report_tables['codec change']['test_video.mp4']  # noqa pylint: disable=line-too-long
+            set(self.ffprobe_report_set._report_tables[
+                'codec change']['test_video.mp4']),
         )
 
-    @mock.patch('golem.testutils.TestTaskIntegration.execute_task',
-                side_effect=BaseException)
+    @mock.patch(
+        'golem.testutils.TestTaskIntegration.execute_task',
+        side_effect=BaseException
+    )
     def test_exceptions_are_collected_but_not_silenced(self, _executor):
         self.operation.request_video_codec_change(VideoCodec.H_264)
         self.operation.request_container_change(Container.MP4)
         with self.assertRaises(BaseException):
             _input, _output, _diff = self.operation.run('test_video.mp4')
         self.assertEqual(
-            self.ffprobe_report_set._report_tables,
-            {'codec change': {
-                'test_video.mp4': {'h264/mp4/2seg': 'BaseException'}}}
+            self.ffprobe_report_set._report_tables, {
+                'codec change': {
+                    'test_video.mp4': {'h264/mp4/2seg': 'BaseException'}
+                }
+            }
         )
 
     @parameterized.expand([
-        ('request_container_change',
-         Container.MPEG,
-         {'format': {'format_name': 'mpeg'}}),
-
-        ('request_video_codec_change',
-         VideoCodec.AV1,
-         {'video': {'codec_name': 'av1'}}),
-
-        ('request_video_bitrate_change',
-         100,
-         {'video': {'bitrate': FuzzyInt(100, 5)}}),
-
-        ('request_resolution_change',
-         'custom_value',
-         {'video': {'resolution': 'custom_value'}}),
-
-        ('request_frame_rate_change',
-         'custom_value',
-         {'video': {'frame_rate': 'custom_value'}}),
-
-
+        (
+            'request_container_change',
+            Container.MPEG,
+            {'format': {'format_name': 'mpeg'}},
+        ),
+        (
+            'request_video_codec_change',
+            VideoCodec.AV1,
+            {'video': {'codec_name': 'av1'}},
+        ),
+        (
+            'request_video_bitrate_change',
+            100,
+            {'video': {'bitrate': FuzzyInt(100, 5)}},
+        ),
+        (
+            'request_resolution_change',
+            'custom_value',
+            {'video': {'resolution': 'custom_value'}},
+        ),
+        (
+            'request_frame_rate_change',
+            'custom_value',
+            {'video': {'frame_rate': 'custom_value'}},
+        ),
     ])
     def test_diff_overrides_are_equal_to_expected_if_function_changing_parameter_called(  # noqa pylint: disable=line-too-long
             self,
