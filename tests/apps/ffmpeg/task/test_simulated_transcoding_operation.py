@@ -98,7 +98,7 @@ class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
         function = getattr(self.operation, function_name)
         function(new_value)
         diff_overrides = self.operation._diff_overrides
-        self.assertEqual(expected_diff_overrides, diff_overrides)
+        self.assertEqual(diff_overrides, expected_diff_overrides)
 
     @parameterized.expand([
         (['format'], [{'format_name'}]),
