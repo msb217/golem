@@ -12,10 +12,10 @@ from tests.apps.ffmpeg.task.simulated_transcoding_operation import \
     SimulatedTranscodingOperation
 
 
-class TestfSimulatedTranscodingOperationIntegration(TestTaskIntegration):
+class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
 
     def setUp(self):
-        super(TestfSimulatedTranscodingOperationIntegration, self).setUp()
+        super(TestSimulatedTranscodingOperationIntegration, self).setUp()
 
         self.RESOURCES = os.path.join(os.path.dirname(
             os.path.dirname(os.path.realpath(__file__))), 'resources')
