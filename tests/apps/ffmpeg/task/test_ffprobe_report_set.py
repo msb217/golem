@@ -137,7 +137,8 @@ class TestFfprobeReportSet(TestTaskIntegration):
             input_value='h264/mp4/2seg',
         )
         self.assertEqual(
-            self.ffprobe_report_set._report_tables, expected_error_report_tables
+            self.ffprobe_report_set._report_tables,
+            expected_error_report_tables,
         )
 
     def test_collect_reports_collects_multiple_rows_correctly(self):
