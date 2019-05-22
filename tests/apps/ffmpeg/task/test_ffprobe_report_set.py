@@ -6,7 +6,7 @@ from tests.apps.ffmpeg.task.ffprobe_report_set import FfprobeReportSet
 
 
 class TestFfprobeReportSet(TestTaskIntegration):
-    diffs_and_results = [
+    DIFFS_AND_RESULTS = [
         (
             [
                 {
@@ -87,7 +87,7 @@ class TestFfprobeReportSet(TestTaskIntegration):
         super().setUp()
         self.ffprobe_report_set = FfprobeReportSet()
 
-    @parameterized.expand(diffs_and_results)
+    @parameterized.expand(DIFFS_AND_RESULTS)
     def test_collect_reports_adds_single_report_table_correctly(
             self,
             diff,
@@ -145,13 +145,13 @@ class TestFfprobeReportSet(TestTaskIntegration):
         expected = {}
         for i in range(3):
             self.ffprobe_report_set.collect_reports(
-                diff=self.diffs_and_results[i][0],
+                diff=self.DIFFS_AND_RESULTS[i][0],
                 experiment_name='codec change',
                 video_file=f'test_video{i}.mp4',
                 input_value='h264/mp4/2seg',
             )
             expected.update({
-                f'test_video{i}.mp4': self.diffs_and_results[i][1][
+                f'test_video{i}.mp4': self.DIFFS_AND_RESULTS[i][1][
                     'codec change'][f'test_video.mp4'],
             })
         self.assertDictEqual(
@@ -162,7 +162,7 @@ class TestFfprobeReportSet(TestTaskIntegration):
     def test_collect_reports_collects_report_tables_correctly_in_markdown(self):
         for i in range(3):
             self.ffprobe_report_set.collect_reports(
-                diff=self.diffs_and_results[i][0],
+                diff=self.DIFFS_AND_RESULTS[i][0],
                 experiment_name='codec change',
                 video_file=f'test_video{i}.mp4',
                 input_value='h264/mp4/2seg',
