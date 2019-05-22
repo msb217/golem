@@ -16,25 +16,25 @@ class TestFfprobeReportSet(TestTaskIntegration):
                     'modified_value': FuzzyInt(12376, 5),
                     'reason': 'Different attribute values',
                     'original_stream_index': 0,
-                    'modified_stream_index': 0
-                }
+                    'modified_stream_index': 0,
+                },
             ],
             {
                 'codec change': {
                     'test_video.mp4': {
                         'h264/mp4/2seg': "<ol><li>`video.bitrate`: "
                                          "`12376[+/-5%]` -> "
-                                         "`13795[+/-5%]`</li><ol>"
-                    }
-                }
-            }
+                                         "`13795[+/-5%]`</li><ol>",
+                    },
+                },
+            },
         ),
         (
             [],
             {'codec change': {
-                'test_video.mp4': {'h264/mp4/2seg': 'OK'}
-                }
-            }
+                    'test_video.mp4': {'h264/mp4/2seg': 'OK'},
+                },
+            },
         ),
         (
             [
@@ -44,21 +44,21 @@ class TestFfprobeReportSet(TestTaskIntegration):
                     'original_value': {
                         'audio': 2,
                         'video': 1,
-                        'subtitle': 7
+                        'subtitle': 7,
                     },
                     'modified_value': {
                         'video': 1,
                         'audio': 2,
-                        'subtitle': 8
+                        'subtitle': 8,
                     },
-                    'reason': 'Different attribute values'
+                    'reason': 'Different attribute values',
                 },
                 {
                     'location': 'subtitle',
                     'original_stream_index': None,
                     'modified_stream_index': 1,
-                    'reason': 'No matching stream'
-                }
+                    'reason': 'No matching stream',
+                },
             ],
             {
                 'codec change': {
@@ -68,10 +68,10 @@ class TestFfprobeReportSet(TestTaskIntegration):
                                          "2, 'subtitle': 8}` -> "
                                          "`{'audio': 2, 'video': "
                                          "1, 'subtitle': "
-                                         "7}`</li><ol>"
-                    }
-                }
-            }
+                                         "7}`</li><ol>",
+                    },
+                },
+            },
         ),
     ]
 
