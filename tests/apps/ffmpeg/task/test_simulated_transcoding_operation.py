@@ -39,10 +39,10 @@ class TestSimulatedTranscodingOperationIntegration(TestTaskIntegration):
         self.assertIsInstance(input_report, FfprobeFormatReport)
         self.assertIsInstance(output_report, FfprobeFormatReport)
         self.assertIsInstance(diff, list)
-        self.assertIn(
-            'h264/mp4/2seg',
+        self.assertEqual(
             set(self.ffprobe_report_set._report_tables[
                 'codec change']['test_video.mp4']),
+            {'h264/mp4/2seg'},
         )
 
     @mock.patch(
