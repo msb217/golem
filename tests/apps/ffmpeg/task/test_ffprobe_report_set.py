@@ -31,7 +31,8 @@ class TestFfprobeReportSet(TestTaskIntegration):
         ),
         (
             [],
-            {'codec change': {
+            {
+                'codec change': {
                     'test_video.mp4': {'h264/mp4/2seg': 'OK'},
                 },
             },
