@@ -104,13 +104,26 @@ class TestFfprobeReportSet(TestTaskIntegration):
         )
 
     @parameterized.expand([
-        ('custom error message',
-         {'codec change': {
-             'test_video.mp4': {'h264/mp4/2seg': 'custom error message'}}}),
-
-        ('different error message',
-         {'codec change': {
-             'test_video.mp4': {'h264/mp4/2seg': 'different error message'}}}),
+        (
+            'custom error message',
+            {
+                'codec change': {
+                    'test_video.mp4': {
+                        'h264/mp4/2seg': 'custom error message',
+                    },
+                },
+            },
+        ),
+        (
+            'different error message',
+            {
+                'codec change': {
+                    'test_video.mp4': {
+                        'h264/mp4/2seg': 'different error message',
+                    },
+                },
+            },
+        ),
     ])
     def test_collect_reports_adds_single_error_table_correctly(
             self,
