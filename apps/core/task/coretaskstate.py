@@ -15,9 +15,8 @@ DEFAULT_SUBTASK_TIMEOUT = 20 * 60
 
 class RunVerification(enum.Enum):
     """
-    Disabled:
-        Completely disable verification for the given task and treat all
-        results as valid without performing any verification.
+    Enabled: (default)
+        Perform verification and act accordingly.
     Lenient:
         The verification should be performed and then in the event of negative
         verification result, the subtask itself should be marked as failed as
@@ -26,6 +25,9 @@ class RunVerification(enum.Enum):
         still be reported to the golem monitor. The provider should get a
         SubtaskResultsAccepted response and be issued a payment just as it
         would had the result been correct.
+    Disabled:
+        Completely disable verification for the given task and treat all
+        results as valid without performing any verification.
     """
     def _generate_next_value_(name, *_):  # pylint:disable=no-self-argument
         return name
