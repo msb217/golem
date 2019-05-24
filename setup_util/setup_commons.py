@@ -98,9 +98,6 @@ class PyInstaller(Command):
                 '--win-private-assemblies', spec
             ])
 
-        print("> Copying taskcollector")
-        self.copy_taskcollector(dist_dir)
-
         print("> Copying examples")
         self.copy_examples(dist_dir)
 
@@ -113,20 +110,6 @@ class PyInstaller(Command):
         print("\n> --------------------------------")
         print("> {}".format(msg))
         print("> --------------------------------\n")
-
-    def copy_taskcollector(self, dist_dir):
-        import shutil
-
-        taskcollector_dir = path.join(
-            'apps',
-            'rendering',
-            'resources',
-            'taskcollector',
-            'x64' if is_windows() else '',
-            'Release'
-        )
-        shutil.copytree(taskcollector_dir,
-                        path.join(dist_dir, taskcollector_dir))
 
     def copy_examples(self, dist_dir):
         import shutil
