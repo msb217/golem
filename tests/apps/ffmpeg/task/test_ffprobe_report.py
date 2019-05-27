@@ -68,20 +68,23 @@ class TestFfprobeFormatReport(TestCase):
         report_modified = FfprobeFormatReport(raw_report_modified)
 
         diff = report_modified.diff(report_original)
+
         expected_diff = [
             {
                 'location': 'format',
                 'attribute': 'stream_types',
-                'original_value': {
-                    'audio': 2,
-                    'video': 1,
-                    'subtitle': 6
-                },
-                'modified_value': {
-                    'video': 1,
-                    'audio': 2,
-                    'subtitle': 7
-                },
+                'original_value':
+                    {
+                        'video': 1,
+                        'audio': 2,
+                        'subtitle': 6
+                    },
+                'modified_value':
+                    {
+                        'video': 1,
+                        'audio': 2,
+                        'subtitle': 7
+                    },
                 'reason': 'Different attribute values'
             },
             {
@@ -91,15 +94,58 @@ class TestFfprobeFormatReport(TestCase):
                 'modified_value': 'hun',
                 'reason': 'Different attribute values',
                 'original_stream_index': 2,
-                'modified_stream_index': 3,
-
+                'modified_stream_index': 3
+            },
+            {
+                'location': 'subtitle',
+                'attribute': 'language',
+                'original_value': 'hun',
+                'modified_value': 'ger',
+                'reason': 'Different attribute values',
+                'original_stream_index': 3,
+                'modified_stream_index': 4
+            },
+            {
+                'location': 'subtitle',
+                'attribute': 'language',
+                'original_value': 'ger',
+                'modified_value': 'fre',
+                'reason': 'Different attribute values',
+                'original_stream_index': 4,
+                'modified_stream_index': 5
+            },
+            {
+                'location': 'subtitle',
+                'attribute': 'language',
+                'original_value': 'fre',
+                'modified_value': 'spa',
+                'reason': 'Different attribute values',
+                'original_stream_index': 5,
+                'modified_stream_index': 6
+            },
+            {
+                'location': 'subtitle',
+                'attribute': 'language',
+                'original_value': 'spa',
+                'modified_value': 'ita',
+                'reason': 'Different attribute values',
+                'original_stream_index': 6,
+                'modified_stream_index': 7
+            },
+            {
+                'location': 'subtitle',
+                'attribute': 'language',
+                'original_value': 'ita',
+                'modified_value': 'jpn',
+                'reason': 'Different attribute values',
+                'original_stream_index': 7,
+                'modified_stream_index': 9
             },
             {
                 'location': 'subtitle',
                 'original_stream_index': None,
-                'modified_stream_index': 9,
-                'reason': 'No matching stream'
-            },
+                'modified_stream_index': 10,
+                'reason': 'No matching stream'}
         ]
         self.assertCountEqual(diff, expected_diff)
 
