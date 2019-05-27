@@ -195,12 +195,10 @@ class FfprobeFormatReport:
                 assert new_diff is not None
 
                 if shortest_diff is None or len(shortest_diff) > len(new_diff):
-                    if 0 < len(diffs) <= len(new_diff):  # pylint: disable=len-as-condition
-                        shortest_diff = []
-                    else:
-                        shortest_diff = new_diff
-                        modified_stream_index = \
-                            modified_stream_reports[modified_idx].index
+                    assert new_diff is not None
+                    shortest_diff = new_diff
+                    matched_modified_stream_id = modified_idx
+                    modified_stream_index = modified_stream_reports[modified_idx].index
 
                 if len(shortest_diff) == 0:  # pylint: disable=len-as-condition
                     break
@@ -214,7 +212,7 @@ class FfprobeFormatReport:
 
                 diffs += shortest_diff
                 unmatched_reports.remove(
-                    modified_idx  # pylint: disable=undefined-loop-variable
+                    matched_modified_stream_id  # pylint: disable=undefined-loop-variable
                 )
             else:
                 diffs.append({
