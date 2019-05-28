@@ -216,8 +216,8 @@ class CoreTask(Task):
             verification_finished()
 
         if self.task_definition.run_verification == RunVerification.disabled:
-            logger.debug("subtask %s: verification disabled; "
-                         "calling verification_finished", subtask_id)
+            logger.debug("verification disabled; calling verification_finished."
+                         " subtask_id=%s", subtask_id)
             result = {'extra_data': {'results': result_files}}
             verification_finished_(
                 subtask_id, SubtaskVerificationState.VERIFIED, result)
