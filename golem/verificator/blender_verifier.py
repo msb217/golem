@@ -74,7 +74,7 @@ class BlenderVerifier(FrameRenderingVerifier):
         subtask_info = self.verification_data['subtask_info']
         work_dir = os.path.dirname(self.verification_data['results'][0])
         dir_mapping = self.docker_task_cls.specify_dir_mapping(
-            resources=subtask_info['path_root'],
+            resources=os.path.join(work_dir, "resources"),
             temporary=os.path.dirname(work_dir),
             work=work_dir,
             output=os.path.join(work_dir, "output"),
